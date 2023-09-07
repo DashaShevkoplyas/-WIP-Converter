@@ -7,5 +7,17 @@
     <groupId>groupId</groupId>
     <artifactId>Converter</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+    </dependencies>
+
 </project>
