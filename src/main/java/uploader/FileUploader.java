@@ -1,4 +1,7 @@
+package uploader;
+
 import org.apache.commons.io.FilenameUtils;
+import utils.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,17 +19,16 @@ import static java.util.Comparator.comparingLong;
 /**
  * Class that is responsible for file manipulations.
  */
-public class FileProcessor {
+public class FileUploader {
 
-    public void process() throws NoSuchFileException, FileNotFoundException {
+    public File uploadLastCreatedFile() throws NoSuchFileException, FileNotFoundException {
         var folder = new File(getDefaultSystemPath("Videos", "Captures").toString());
         if (!folder.exists() || !folder.isDirectory()) {
             throw new NoSuchFileException("Folder does not exist or it is not a directory");
         }
-        var lastCreatedFile = lastCreatedFileIn(folder).orElseThrow(
+        return lastCreatedFileIn(folder).orElseThrow(
                 () -> new FileNotFoundException("No file was found by given characteristics")
         );
-        System.out.println("The last file that was created: " + lastCreatedFile.getName());
     }
 
     private Optional<File> lastCreatedFileIn(File folder) throws FileNotFoundException {
@@ -41,12 +43,12 @@ public class FileProcessor {
     }
 
     private boolean hasMP4Format(String fileName) {
-        return FilenameUtils.getExtension(fileName).equals("mp4");
+        return FilenameUtils.getExtension(fileName).equals(Constants.FORMAT);
     }
 
     private long creationTimeInMills(Path path) {
         try {
-            var creationTime = (FileTime) Files.getAttribute(path, "creationTime");
+            var creationTime = (FileTime) Files.getAttribute(path, Constants.CREATION_TIME_PROP);
             return creationTime.toMillis();
         } catch (IOException ex) {
             throw new RuntimeException("Failed to get file creation time due to the following reason: " + ex);
@@ -54,6 +56,6 @@ public class FileProcessor {
     }
 
     private Path getDefaultSystemPath(String... customPath) {
-        return FileSystems.getDefault().getPath(System.getProperty("user.home"), customPath);
+        return FileSystems.getDefault().getPath(System.getProperty(Constants.SYSTEM_PROPERTY), customPath);
     }
 }
